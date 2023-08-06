@@ -30,7 +30,7 @@ int main()
 {
     memset(visited, false, sizeof(visited));
     cin >> n >> m;
-    
+
     for (int i = 0; i < n; ++i) {
         cin >> s[i];
     }
@@ -43,6 +43,7 @@ int main()
             }
         }
     }
+    
     cout << cnt;
 
     return 0;
