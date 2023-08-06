@@ -22,8 +22,8 @@ int main()
     queue<pair<int, int>> mq;
     pair<int, int> coorA, coorB;
 
-    int trance[n][m];
-    memset(trance, -1, sizeof(trance));
+    int trace[n][m];
+    memset(trace, -1, sizeof(trace));
 
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < m; ++j) {
@@ -56,7 +56,7 @@ int main()
                 }
                 mq.push({ nx, ny });
                 visited[nx][ny] = true;
-                trance[nx][ny] = i;
+                trace[nx][ny] = i;
             }
         }
     }
@@ -66,7 +66,7 @@ int main()
         string path;
         while (coorB != coorA) {
             auto [x, y] = coorB;
-            int i = trance[x][y];
+            int i = trace[x][y];
             path.push_back(op[i]);
             int nx = x - DIR[i];
             int ny = y - DIR[i + 1];
