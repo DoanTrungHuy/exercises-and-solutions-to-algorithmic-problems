@@ -22,22 +22,22 @@ void dfs(vector<vector<int>> &adj, int t, int u) {
 int main() {
     cin >> n >> m;
 
-    vector<vector<int>> adj, r_adj;
+    vector<vector<int>> adj[2];
     visited.resize(2, vector<int>(n + 1, false));
 
-    adj.resize(n + 1);
-    r_adj.resize(n + 1);
+    adj[0].resize(n + 1);
+    adj[1].resize(n + 1);
 
     for (int i = 1; i <= m; ++i) {
         int a, b, w;
         cin >> a >> b >> w;
         edges.push_back({-1LL*w, a, b});
-        adj[a].push_back(b);
-        r_adj[b].push_back(a);
+        adj[0][a].push_back(b);
+        adj[1][b].push_back(a);
     }
 
-    dfs(adj, 0, 1);
-    dfs(r_adj, 1, n);
+    dfs(adj[0], 0, 1);
+    dfs(adj[1], 1, n);
 
     vector<ll> dist(n + 1, LLONG_MAX);
     dist[1] = 0;
