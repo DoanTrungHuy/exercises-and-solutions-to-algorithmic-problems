@@ -22,9 +22,6 @@ void dfs(int u) {
                 ans.push_back(trace[ans.back()]);
             }
             ans.push_back(u);
-            if (ans.size() <= 3) {
-                continue;
-            }
             reverse(ans.begin(), ans.end());
             cout << ans.size() << '\n';
             for (int x : ans) {
@@ -33,6 +30,8 @@ void dfs(int u) {
             exit(0);
         }
     }
+
+    color[u] = 2;
 }
 
 int main() {
@@ -42,7 +41,6 @@ int main() {
         int a, b;
         cin >> a >> b;
         adj[a].push_back(b);
-        adj[b].push_back(a);
     }
 
     for (int i = 1; i <= n; ++i) {
