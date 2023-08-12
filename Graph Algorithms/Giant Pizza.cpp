@@ -81,12 +81,6 @@ int main() {
         }
     }
 
-    for (int i = 1; i <= m*2; ++i) {
-        cout << par[i] << ' ';
-    }
-
-    cout << '\n';
-
     for (int i = 1; i <= m; ++i) {
         cout << (par[i] < par[i + m] ? '+' : '-') << ' ';
     }
