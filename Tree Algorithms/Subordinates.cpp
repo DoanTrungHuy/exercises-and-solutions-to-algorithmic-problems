@@ -14,7 +14,6 @@ int dfs(int u) {
     return dp[u];
 }
 
-
 int main() {
     cin >> n;
 
