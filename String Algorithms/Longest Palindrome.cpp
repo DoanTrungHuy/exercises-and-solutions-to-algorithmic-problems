@@ -17,7 +17,7 @@ int get_index(int m) {
     int l[2] = {1, n - m + 1};
     int r[2] = {m, n};
 
-    while (r[0] <= n and  l[1] >= 1) {
+    while (r[0] <= n and l[1] >= 1) {
         if (get_hash(0, l[0], r[0]) == get_hash(1, l[1], r[1])) {
             return l[0] - 1; 
         }
