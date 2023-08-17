@@ -14,12 +14,17 @@ ull get_hash(int t, int i, int j) {
 }
 
 int get_index(int m) {
-    for (int l = 1; l <= n - m + 1; ++l) {
-        int r = l + m - 1;
-        if (get_hash(0, l, r) == get_hash(1, n - r + 1, n - l + 1)) {
-            return l - 1;
+    int l[2] = {1, n - m + 1};
+    int r[2] = {m, n};
+
+    while (r[0] <= n and r[1] >= 1) {
+        if (get_hash(0, l[0], r[0]) == get_hash(1, l[1], r[1])) {
+            return l[0] - 1; 
         }
+        l[0]++, r[0]++;
+        l[1]--, r[1]--;
     }
+
     return -1;
 }
 
