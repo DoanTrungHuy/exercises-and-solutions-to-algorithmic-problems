@@ -1,0 +1,12 @@
+{
+    "C_Cpp.errorSquiggles": "disabled",
+    "files.associations": {
+        "*.embeddedhtml": "html",
+        "limits": "cpp",
+        "utility": "cpp",
+        "xutility": "cpp",
+        "initializer_list": "cpp",
+        "xstring": "cpp",
+        "cstdlib": "cpp"
+    }
+}
