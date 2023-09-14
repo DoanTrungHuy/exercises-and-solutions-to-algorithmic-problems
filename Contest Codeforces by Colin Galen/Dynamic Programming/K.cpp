@@ -17,8 +17,8 @@ ll dp(ll i, ll j) {
     if (memo[i][j] != -1) {
         return memo[i][j];
     }
-    ll ans = dp(i + 1, j);
-    for (ll v = 2*j; v <= n; v += j) {
+    ll ans = 0;
+    for (ll v = j; v <= n; v += j) {
         ans = (ans + dp(i + 1, v)) % MOD;
     }
     return memo[i][j] = ans;
