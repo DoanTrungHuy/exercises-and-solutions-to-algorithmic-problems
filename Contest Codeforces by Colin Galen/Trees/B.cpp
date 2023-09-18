@@ -4,37 +4,44 @@ using namespace std;
 using ll = long long;
 
 ll n;
-const ll MN = 1e5 + 1;
+const ll MN = 1e5;
 vector<ll> adj[MN];
-
-void dfs(ll u, ll p, double probability, ll depth, double &ans) {
-    double n_child = 0;
-    for (ll v : adj[u]) {
-        if (v != p) {
-            n_child++;
-        }
-    }
-    for (ll v : adj[u]) {
-        if (v != p) {
-            dfs(v, u, probability / n_child, depth + 1, ans);
-        }
-    }
-    if (n_child == 0) {
-        ans += probability*depth;
-    }
-}
+ll c[MN];
 
 int main()
 {
     cin >> n;
-    for (ll i = 0; i < n - 1; ++i) {
-        ll u, v;
-        cin >> u >> v;
-        adj[u].push_back(v);
-        adj[v].push_back(u);
+    for (ll i = 0; i < n; ++i) {
+        ll p;
+        cin >> p;
+        if (p != -1) {
+            p--;
+            adj[p].push_back(i);
+        }
+        cin >> c[i];
     }
-    double ans = 0;
-    dfs(1, 0, 1, 0, ans);
-    cout << fixed << setprecision(6) << ans;
+    vector<ll> vertex_valid;
+    for (ll u = 0; u < n; ++u) {
+        if (c[u] == 1) {
+            bool flag = false;
+            for (ll v : adj[u]) {
+                if (c[v] == 0) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                vertex_valid.push_back(u + 1);
+            }
+        }
+    }
+    if (vertex_valid.size()) {
+        for (ll v : vertex_valid) {
+            cout << v << ' ';
+        }
+    }
+    else {
+        cout << -1;
+    }
     return 0;
 }
