@@ -15,14 +15,12 @@ int main()
         cin >> c[i] >> m[i];
     }
     for (ll i = 0; i < MN; ++i) {
-        for (ll j = 0; j < MM; ++j) {
-            ll s = (i) % MM;
-            ll e = (i + 1) % MM;
-            ll remain = min(m[s], c[e] - m[e]);
+        ll s = (i) % MM;
+        ll e = (i + 1) % MM;
+        ll remain = min(m[s], c[e] - m[e]);
 
-            m[e] += remain;
-            m[s] -= remain;
-        }
+        m[e] += remain;
+        m[s] -= remain;
     }
     for (ll i = 0; i < MM; ++i) {
         cout << m[i] << '\n';
