@@ -77,10 +77,6 @@ int main() {
     for (ll i = 0; i < M; ++i) {
         cin >> s[i];
     }
-    if (s[0][0] == '#') {
-        cout << 0;
-        return 0;
-    }
     for (ll i = 0; i < M; ++i) {
         for (ll j = 0; j < N; ++j) {
             if (is_range(i, j + 1)) {
