@@ -44,7 +44,7 @@ int main() {
         cin >> u >> v >> w;
         edges.push_back({u, v, w});
     }
-    sort(edges.begin(), edges.end(), [&](tp a, tp b) {
+    sort(edges.begin(), edges.end(), [&](tp &a, tp &b) {
         return get<2>(a) < get<2>(b);
     });
     DSU dsu(N);
