@@ -49,6 +49,7 @@
         "optional": "cpp",
         "iomanip": "cpp",
         "xlocmon": "cpp",
-        "xloctime": "cpp"
+        "xloctime": "cpp",
+        "bitset": "cpp"
     }
 }
