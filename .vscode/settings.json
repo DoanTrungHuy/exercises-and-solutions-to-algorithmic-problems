@@ -51,6 +51,10 @@
         "xlocmon": "cpp",
         "xloctime": "cpp",
         "bitset": "cpp",
-        "deque": "cpp"
+        "deque": "cpp",
+        "queue": "cpp",
+        "ranges": "cpp",
+        "span": "cpp",
+        "stack": "cpp"
     }
 }
