@@ -4,7 +4,7 @@
  
 using namespace std;
  
-const int MN = 2e5 + 1;
+const int MN = 2e5 + 50;
 int N, Q;
 int val[MN];
 vector<int> adj[MN];
@@ -106,6 +106,7 @@ int query(int u, int v) {
 }
  
 int main() {
+    srand(time(NULL));
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
