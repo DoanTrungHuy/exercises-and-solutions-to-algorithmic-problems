@@ -1,17 +1,14 @@
 #include <bits/stdc++.h>
-#pragma GCC optimize("unroll-loops")
-#pragma GCC optimize("Ofast")
-#pragma GCC optimize("-O3")
-#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,tune=native")
+#pragma GCC optimize("O3,unroll-loops,no-stack-protector")
+#pragma GCC target("sse4,avx2,fma")
  
 using namespace std;
  
-const int MN = 2e5 + 1;
+const int MN = 2e5 + 10;
 int N, Q;
 int val[MN];
 vector<int> adj[MN];
-const int LOG = ceil(log2(MN));
-int depth[MN], sz[MN], par[MN], up[MN][LOG + 1];
+int depth[MN], sz[MN], par[MN];
  
 void dfs(int u, int p) {
     sz[u] = 1;
@@ -19,7 +16,6 @@ void dfs(int u, int p) {
         if (v == p) {
             continue;
         }
-        up[v][0] = u;
         par[v] = u;
         depth[v] = depth[u] + 1; 
         dfs(v, u);
@@ -27,17 +23,13 @@ void dfs(int u, int p) {
     }
 }
  
-int chain_id[MN], chain_head[MN];
-int pos[MN];
-int curr_chain = 1, curr_pos = 1;
+int chain_head[MN], pos[MN];
+int curr_pos = 1;
  
-void hld(int u, int p) {
-    if (!chain_head[curr_chain]) {
-        chain_head[curr_chain] = u;
-    }
-    chain_id[u] = curr_chain;
+void hld(int u, int p, int h) {
+    chain_head[u] = h;
     pos[u] = curr_pos;
-    curr_pos++;
+    ++curr_pos;
     int next_node = 0;
     for (int v : adj[u]) {
         if (v == p) {
@@ -48,14 +40,13 @@ void hld(int u, int p) {
         }
     }
     if (next_node) {
-        hld(next_node, u);
+        hld(next_node, u, h);
     }
     for (int v : adj[u]) {
         if (v == p or v == next_node) {
             continue;
         }
-        curr_chain++;
-        hld(v, u);
+        hld(v, u, v);
     }
 }
  
@@ -69,14 +60,14 @@ void update(int node, int left, int right, int index, int value) {
         tree[node] = value;
         return;
     }
-    int mid = (left + right) >> 1;
+    int mid = (left + right) / 2;
     if (index <= mid) {
-        update(node << 1, left, mid, index, value);
+        update(2*node, left, mid, index, value);
     }
     else {
-        update(node << 1 | 1, mid + 1, right, index, value);
+        update(2*node + 1, mid + 1, right, index, value);
     }
-    tree[node] = max(tree[node << 1], tree[node << 1 | 1]);
+    tree[node] = max(tree[2*node], tree[2*node + 1]);
 }
  
 int get(int node, int left, int right, int q_left, int q_right) {
@@ -86,70 +77,38 @@ int get(int node, int left, int right, int q_left, int q_right) {
     if (q_left <= left and right <= q_right) {
         return tree[node];
     }
-    int mid = (left + right) >> 1;
+    int mid = (left + right) / 2;
     int left_node = 0, right_node = 0;
     if (q_left <= mid) {
-        left_node = get(node << 1, left, mid, q_left, q_right);
+        left_node = get(2*node, left, mid, q_left, q_right);
     }
     if (mid <= q_right) {
-        right_node = get(node << 1 | 1, mid + 1, right, q_left, q_right);
+        right_node = get(2*node + 1, mid + 1, right, q_left, q_right);
     }
     return max(left_node, right_node);
 }
- 
-int node_lca(int u, int v) {
-    if (u == v) {
-        return u;
+
+int query(int u, int v) {
+    int ans = 0;
+    while (chain_head[u] != chain_head[v]) {
+        if (depth[chain_head[u]] < depth[chain_head[v]]) {
+            swap(u, v);
+        }
+        ans = max(ans, get(1, 1, N, pos[chain_head[u]], pos[u]));
+        u = par[chain_head[u]];
     }
-    if (depth[u] < depth[v]) {
+
+    if (depth[u] > depth[v]) {
         swap(u, v);
     }
-    int diff = depth[u] - depth[v];
-    for (int i = LOG; i >= 0; --i) {
-        if (diff & (1 << i)) {
-            u = up[u][i];
-        }
-    }
-    if (u == v) {
-        return u;
-    }
-    for (int i = LOG; i >= 0; --i) {
-        if (up[u][i] != up[v][i]) {
-            u = up[u][i];
-            v = up[v][i];
-        }
-    }
-    return up[u][0];
-}
- 
-int query(int u, int v) {
-    int lca = node_lca(u, v);
-    int ans = 0;
- 
-    while (chain_id[u] != chain_id[lca]) {
-        ans = max(ans, get(1, 1, N, pos[chain_head[chain_id[u]]], pos[u]));
-        u = par[chain_head[chain_id[u]]];
-    }
- 
-    while (chain_id[v] != chain_id[lca]) {
-        ans = max(ans, get(1, 1, N, pos[chain_head[chain_id[v]]], pos[v]));
-        v = par[chain_head[chain_id[v]]];
-    }
- 
-    if (depth[u] < depth[v]) {
-        ans = max(ans, get(1, 1, N, pos[u], pos[v]));
-    }
-    else {
-        ans = max(ans, get(1, 1, N, pos[v], pos[u]));
-    }
- 
-    return ans;
+
+    return max(ans, get(1, 1, N, pos[u], pos[v]));
 }
  
 int main() {
     ios_base::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
+    cin.tie(NULL);
+    cout.tie(NULL);
     cin >> N >> Q;
     for (int i = 1; i <= N; ++i) {
         cin >> val[i];
@@ -160,16 +119,8 @@ int main() {
         adj[u].push_back(v);
         adj[v].push_back(u);
     }
-    memset(up, -1, sizeof(up));
-    dfs(1, 1);
-    for (int j = 1; j <= LOG; ++j) {
-        for (int i = 1; i <= N; ++i) {
-            if (up[i][j - 1] != -1) {
-                up[i][j] = up[up[i][j - 1]][j - 1];
-            }
-        }
-    }
-    hld(1, 1);
+    dfs(1, 0);
+    hld(1, 0, 1);
     for (int i = 1; i <= N; ++i) {
         update(1, 1, N, pos[i], val[i]);
     }
