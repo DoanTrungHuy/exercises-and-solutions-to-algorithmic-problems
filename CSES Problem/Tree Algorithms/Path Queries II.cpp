@@ -4,7 +4,7 @@
  
 using namespace std;
  
-const int MN = 2e5 + 10;
+const int MN = 2e5 + 1;
 int N, Q;
 int val[MN];
 vector<int> adj[MN];
@@ -87,7 +87,7 @@ int get(int node, int left, int right, int q_left, int q_right) {
     }
     return max(left_node, right_node);
 }
-
+ 
 int query(int u, int v) {
     int ans = 0;
     while (chain_head[u] != chain_head[v]) {
@@ -97,11 +97,11 @@ int query(int u, int v) {
         ans = max(ans, get(1, 1, N, pos[chain_head[u]], pos[u]));
         u = par[chain_head[u]];
     }
-
+ 
     if (depth[u] > depth[v]) {
         swap(u, v);
     }
-
+ 
     return max(ans, get(1, 1, N, pos[u], pos[v]));
 }
  
